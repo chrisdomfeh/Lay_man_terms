@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lay Man Terms — Understand Anything</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* ── RESET & VARIABLES ──────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0b0c10;
+      --surface: #13141a;
+      --surface2: #1c1d26;
+      --border: rgba(255, 255, 255, 0.07);
+      --text: #e8e6df;
+      --muted: #6b6a72;
+      --accent: #c8f04a;
+      --accent2: #4af0b4;
+      --amber: #f0c84a;
+      --glow: rgba(200, 240, 74, 0.18);
+      --glow2: rgba(74, 240, 180, 0.12);
+      --radius: 18px;
+      --font-display: 'Fraunces', serif;
+      --font-body: 'DM Sans', sans-serif;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f2eb;
+      --surface: #eceae0;
+      --surface2: #e2e0d5;
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #1a1a20;
+      --muted: #8a8880;
+      --glow: rgba(100, 160, 0, 0.12);
+      --glow2: rgba(0, 160, 120, 0.10);
+    }
+
+    /* ── CURSOR ─────────────────────────────────────────── */
+    * {
+      cursor: none !important;
+    }
+
+    #cursor-dot,
+    #cursor-ring {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+    }
+
+    #cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      top: 0;
+      left: 0;
+    }
+
+    #cursor-ring {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--accent);
+      top: 0;
+      left: 0;
+      transition: width .25s, height .25s, border-color .25s, background .25s;
+      mix-blend-mode: difference;
+    }
+
+    #cursor-ring.hovering {
+      width: 54px;
+      height: 54px;
+      background: rgba(200, 240, 74, 0.08);
+      border-color: var(--accent2);
+    }
+
+    /* ── AMBIENT ORBS ────────────────────────────────────── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+      animation: orb-drift 12s ease-in-out infinite alternate;
+    }
+
+    .orb1 {
+      width: 420px;
+      height: 420px;
+      background: var(--glow);
+      top: -80px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .orb2 {
+      width: 360px;
+      height: 360px;
+      background: var(--glow2);
+      bottom: 40px;
+      right: -80px;
+      animation-delay: 3s;
+    }
+
+    .orb3 {
+      width: 260px;
+      height: 260px;
+      background: rgba(240, 200, 74, 0.08);
+      top: 40%;
+      left: 40%;
+      animation-delay: 6s;
+    }
+
+    @keyframes orb-drift {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(40px, 30px) scale(1.1);
+      }
+    }
+
+    /* ── BASE ────────────────────────────────────────────── */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ───────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      background: rgba(11, 12, 16, 0.6);
+      border-bottom: 1px solid var(--border);
+    }
+
+    [data-theme="light"] nav {
+      background: rgba(244, 242, 235, 0.7);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px 16px;
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .api-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 50px;
+      padding: 8px 20px;
+      color: #0b0c10;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: all 0.3s;
+    }
+
+    .api-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--glow);
+    }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fade-up 0.8s ease 0.2s forwards;
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent2);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.7)
+      }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      color: var(--text);
+      opacity: 0;
+      animation: fade-up 0.9s ease 0.4s forwards;
+      max-width: 900px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 24px auto 0;
+      font-weight: 300;
+      opacity: 0;
+      animation: fade-up 0.9s ease 0.6s forwards;
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fade-up 1s ease 1.2s forwards;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scroll-line 2s ease-in-out infinite;
+    }
+
+    @keyframes scroll-line {
+      0% {
+        opacity: 0;
+        transform: scaleY(0);
+        transform-origin: top
+      }
+
+      50% {
+        opacity: 1;
+        transform: scaleY(1)
+      }
+
+      100% {
+        opacity: 0;
+        transform: scaleY(0);
+        transform-origin: bottom
+      }
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── MAIN WORKSPACE ──────────────────────────────────── */
+    .workspace {
+      position: relative;
+      z-index: 2;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 120px;
+    }
+
+    /* ── SCROLL REVEAL ───────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(48px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 {
+      transition-delay: 0.1s;
+    }
+
+    .reveal-delay-2 {
+      transition-delay: 0.2s;
+    }
+
+    .reveal-delay-3 {
+      transition-delay: 0.3s;
+    }
+
+    /* ── SECTION LABEL ───────────────────────────────────── */
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── API KEY PANEL ───────────────────────────────────── */
+    .api-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .api-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .api-panel h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+
+    .api-panel p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .api-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .api-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      transition: border-color 0.3s;
+    }
+
+    .api-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .api-save {
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 22px;
+      color: #0b0c10;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .api-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--glow);
+    }
+
+    .api-status {
+      font-size: 0.78rem;
+      margin-top: 10px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .api-status.ok {
+      background: rgba(74, 240, 180, 0.12);
+      color: var(--accent2);
+      display: block;
+    }
+
+    .api-status.err {
+      background: rgba(240, 74, 74, 0.12);
+      color: #f06a4a;
+      display: block;
+    }
+
+    /* ── UPLOAD ZONE ─────────────────────────────────────── */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 56px 32px;
+      text-align: center;
+      background: var(--surface);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .upload-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(200, 240, 74, 0.05);
+      transform: scale(1.01);
+    }
+
+    .upload-zone.has-file {
+      border-color: var(--accent2);
+      background: rgba(74, 240, 180, 0.05);
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .upload-zone:hover .upload-icon {
+      transform: translateY(-6px);
+    }
+
+    .upload-zone h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+
+    .upload-zone p {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .upload-zone input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .file-types {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .file-badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    .file-name {
+      margin-top: 16px;
+      padding: 10px 18px;
+      background: var(--surface2);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: var(--accent2);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .file-name.show {
+      display: flex;
+    }
+
+    /* ── PROMPT AREA ─────────────────────────────────────── */
+    .prompt-section {
+      margin-bottom: 32px;
+    }
+
+    .quick-prompts {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .quick-prompt {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 7px 16px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .quick-prompt:hover,
+    .quick-prompt.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(200, 240, 74, 0.06);
+    }
+
+    .prompt-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      transition: border-color 0.3s;
+    }
+
+    .prompt-box:focus-within {
+      border-color: var(--accent);
+    }
+
+    .prompt-textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      resize: none;
+      outline: none;
+      min-height: 52px;
+      max-height: 180px;
+      line-height: 1.6;
+    }
+
+    .prompt-textarea::placeholder {
+      color: var(--muted);
+    }
+
+    .send-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s;
+      font-size: 1.2rem;
+    }
+
+    .send-btn:hover:not(:disabled) {
+      transform: scale(1.08);
+      box-shadow: 0 8px 24px var(--glow);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.4;
+    }
+
+    /* ── RESPONSE AREA ───────────────────────────────────── */
+    .response-area {
+      margin-top: 8px;
+    }
+
+    .response-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: none;
+    }
+
+    .response-card.show {
+      display: block;
+    }
+
+    .response-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface2);
+    }
+
+    .response-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+
+    .response-header-text {
+      flex: 1;
+    }
+
+    .response-header-text strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .response-header-text span {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .response-body {
+      padding: 28px 32px;
+      font-size: 0.97rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .response-body h2,
+    .response-body h3 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      margin: 24px 0 10px;
+      color: var(--text);
+    }
+
+    .response-body h2 {
+      font-size: 1.4rem;
+    }
+
+    .response-body h3 {
+      font-size: 1.15rem;
+      color: var(--accent);
+    }
+
+    .response-body p {
+      margin-bottom: 14px;
+    }
+
+    .response-body ul,
+    .response-body ol {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+
+    .response-body li {
+      margin-bottom: 6px;
+    }
+
+    .response-body strong {
+      color: var(--accent2);
+      font-weight: 500;
+    }
+
+    .response-body em {
+      color: var(--amber);
+    }
+
+    .response-body code {
+      background: var(--surface2);
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-size: 0.88em;
+      font-family: 'Courier New', monospace;
+      color: var(--accent);
+    }
+
+    .response-body blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 16px 0;
+      padding: 12px 20px;
+      background: rgba(200, 240, 74, 0.05);
+      border-radius: 0 10px 10px 0;
+      color: var(--muted);
+    }
+
+    /* ── LOADING ─────────────────────────────────────────── */
+    .loading-state {
+      padding: 40px 32px;
+      text-align: center;
+      display: none;
+    }
+
+    .loading-state.show {
+      display: block;
+    }
+
+    .loading-dots {
+      display: inline-flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .loading-dots span {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: bounce-dot 1.2s ease-in-out infinite;
+    }
+
+    .loading-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+      background: var(--accent2);
+    }
+
+    .loading-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+      background: var(--amber);
+    }
+
+    @keyframes bounce-dot {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0.6);
+        opacity: 0.5
+      }
+
+      40% {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .loading-text {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    /* ── ERROR STATE ─────────────────────────────────────── */
+    .error-state {
+      padding: 24px 32px;
+      display: none;
+      background: rgba(240, 74, 74, 0.07);
+      border-top: 1px solid rgba(240, 74, 74, 0.2);
+      color: #f06a4a;
+      font-size: 0.88rem;
+    }
+
+    .error-state.show {
+      display: block;
+    }
+
+    /* ── HISTORY ─────────────────────────────────────────── */
+    .history-section {
+      margin-top: 60px;
+    }
+
+    .history-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      transition: all 0.3s;
+    }
+
+    .history-item:hover {
+      border-color: var(--border);
+      transform: translateX(4px);
+    }
+
+    .history-item-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .history-q {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .history-time {
+      font-size: 0.72rem;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .history-preview {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .history-expand {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 12px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+
+    .history-expand:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── HOW IT WORKS ────────────────────────────────────── */
+    .how-section {
+      position: relative;
+      z-index: 2;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 24px 120px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    @media(max-width:700px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .step-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+    }
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: -2px;
+    }
+
+    .step-card h4 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    footer span {
+      color: var(--accent);
+    }
+
+    /* ── MODAL (API KEY) ─────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(11, 12, 16, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      display: none;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      animation: modal-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modal-pop {
+      from {
+        transform: scale(0.9);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      color: var(--muted);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .modal h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 24px;
+    }
+
+    .modal .api-input {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .modal .api-save {
+      width: 100%;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    /* ── SCROLLBAR ───────────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* ── TYPING CURSOR ───────────────────────────────────── */
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 2px;
+      animation: blink 0.8s infinite;
+      vertical-align: text-bottom;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Custom Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Ambient Orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-logo">Lay Man <span>Terms</span></div>
+    <div class="nav-right">
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">☀️</span>
+        <span id="theme-label">Light</span>
+      </button>
+      <button class="api-btn" onclick="openModal()">🔑 API Key</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge"><span class="dot"></span> AI Powered Tutor</div>
+    <h1>Complex notes.<br><em>Simple words.</em></h1>
+    <p class="hero-sub">Drop any document — textbooks, lecture notes, research papers — and get plain-English
+      explanations from your friendly AI tutor.</p>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- Workspace -->
+  <main class="workspace">
+
+    <!-- API Key Panel -->
+    <div class="reveal">
+      <div class="section-label">Step 1 — Connect</div>
+      <div class="api-panel" id="apiPanel">
+        <h3>Your Google Gemini API Key</h3>
+        <p>Enter your key once — it stays in your browser session only.</p>
+        <div class="api-row">
+          <input class="api-input" type="password" id="apiKeyInput" placeholder="AIza..." />
+          <button class="api-save" onclick="saveApiKey()">Save Key</button>
+        </div>
+        <div class="api-status" id="apiStatus"></div>
+      </div>
+    </div>
+
+    <!-- Upload Zone -->
+    <div class="reveal reveal-delay-1">
+      <div class="section-label">Step 2 — Upload</div>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept=".pdf,.txt,.md,.docx,.doc,.png,.jpg,.jpeg"
+          onchange="handleFileSelect(event)" />
+        <span class="upload-icon">📄</span>
+        <h3>Drop your document here</h3>
+        <p>or click anywhere to browse</p>
+        <div class="file-types">
+          <span class="file-badge">PDF</span>
+          <span class="file-badge">TXT</span>
+          <span class="file-badge">MD</span>
+          <span class="file-badge">Images</span>
+        </div>
+        <div class="file-name" id="fileName">
+          <span>📎</span><span id="fileNameText"></span>
+          <button onclick="clearFile(event)"
+            style="background:none;border:none;color:#f06a4a;font-size:1rem;padding:0 4px;">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prompt -->
+    <div class="reveal reveal-delay-2">
+      <div class="section-label">Step 3 — Ask</div>
+      <div class="prompt-section">
+        <div class="quick-prompts">
+          <button class="quick-prompt"
+            onclick="setQuickPrompt(this, 'Explain this document like I\'m 12 years old.')">🎓 Explain simply</button>
+          <button class="quick-prompt"
+            onclick="setQuickPrompt(this, 'What are the key takeaways from this document?')">🔑 Key takeaways</button>
+          <button class="quick-prompt" onclick="setQuickPrompt(this, 'Summarise this document in bullet points.')">📋
+            Bullet summary</button>
+          <button class="quick-prompt"
+            onclick="setQuickPrompt(this, 'What are the most important concepts I need to understand here?')">💡 Core
+            concepts</button>
+          <button class="quick-prompt" onclick="setQuickPrompt(this, 'Create study notes from this document.')">📝 Study
+            notes</button>
+        </div>
+        <div class="prompt-box">
+          <textarea class="prompt-textarea" id="promptInput" rows="2"
+            placeholder="Ask anything about your document... e.g. 'Explain this in simple terms'"
+            onkeydown="handlePromptKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendPrompt()" title="Send">
+            ➤
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Response -->
+    <div class="reveal reveal-delay-3" id="responseWrapper">
+      <div class="response-card" id="responseCard">
+        <div class="response-header">
+          <div class="response-avatar">🎓</div>
+          <div class="response-header-text">
+            <strong>Lay Man Terms</strong>
+            <span id="responseSubtitle">Your AI tutor</span>
+          </div>
+          <button class="copy-btn" onclick="copyResponse()">Copy</button>
+        </div>
+        <div class="loading-state" id="loadingState">
+          <div class="loading-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <p class="loading-text">Reading your document and thinking in plain English...</p>
+        </div>
+        <div class="response-body" id="responseBody"></div>
+        <div class="error-state" id="errorState"></div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="history-section reveal" id="historySection" style="display:none;">
+      <div class="section-label">Previous Explanations</div>
+      <div id="historyList"></div>
+    </div>
+
+  </main>
+
+  <!-- How It Works -->
+  <section class="how-section">
+    <div class="reveal">
+      <div class="section-label">How It Works</div>
+      <h2
+        style="font-family:var(--font-display);font-size:clamp(1.8rem,4vw,3rem);font-weight:300;letter-spacing:-1px;max-width:500px;line-height:1.15;">
+        Three steps to <em style="font-style:italic;color:var(--accent)">clarity</em>
+      </h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal reveal-delay-1">
+        <div class="step-num">01</div>
+        <h4>Upload Your Document</h4>
+        <p>Drop in any PDF, text file, or image of your notes. We support lecture slides, textbook pages, research
+          papers, and more.</p>
+      </div>
+      <div class="step-card reveal reveal-delay-2">
+        <div class="step-num">02</div>
+        <h4>Ask Your Question</h4>
+        <p>Type freely — "explain this simply," "what are the key concepts," or any specific question about the
+          material.</p>
+      </div>
+      <div class="step-card reveal reveal-delay-3">
+        <div class="step-num">03</div>
+        <h4>Get Plain English</h4>
+        <p>Your AI tutor breaks everything down in friendly, clear language — like a patient friend who actually
+          understands the subject.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    Built for curious minds · <span>Lay Man Terms</span> · Powered by Google Gemini
+  </footer>
+
+  <!-- API Key Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h2>Add Your API Key</h2>
+      <p>Get a free key from <a href="https://aistudio.google.com/apikey" target="_blank"
+          style="color:var(--accent);text-decoration:none;">Google AI Studio</a>. Your key is never stored on any server
+        — it lives only in this browser tab.</p>
+      <input class="api-input" type="password" id="modalApiKey" placeholder="AIza..." />
+      <button class="api-save" onclick="saveApiKeyFromModal()">Save & Continue</button>
+      <div class="api-status" id="modalStatus" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ────────────────────────────────────────────────
+       CURSOR
+    ──────────────────────────────────────────────── */
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+    });
+
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('button, a, input, textarea, .upload-zone, .step-card').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
+    });
+
+    /* ────────────────────────────────────────────────
+       THEME
+    ──────────────────────────────────────────────── */
+    let isDark = true;
+    function toggleTheme() {
+      isDark = !isDark;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+      document.getElementById('theme-label').textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    /* ────────────────────────────────────────────────
+       SCROLL REVEAL
+    ──────────────────────────────────────────────── */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ────────────────────────────────────────────────
+       FILE HANDLING
+    ──────────────────────────────────────────────── */
+    let uploadedFileData = null;
+    let uploadedFileName = '';
+    let uploadedFileType = '';
+
+    const uploadZone = document.getElementById('uploadZone');
+    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault(); uploadZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) processFile(file);
+    });
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) processFile(file);
+    }
+
+    function processFile(file) {
+      uploadedFileName = file.name;
+      uploadedFileType = file.type;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        uploadedFileData = ev.target.result;
+        uploadZone.classList.add('has-file');
+        document.getElementById('fileName').classList.add('show');
+        document.getElementById('fileNameText').textContent = file.name;
+        const icon = file.type.startsWith('image') ? '🖼️' : '📄';
+        uploadZone.querySelector('.upload-icon').textContent = icon;
+      };
+      if (file.type.startsWith('image/')) reader.readAsDataURL(file);
+      else reader.readAsText(file);
+    }
+
+    function clearFile(e) {
+      e.stopPropagation();
+      uploadedFileData = null; uploadedFileName = ''; uploadedFileType = '';
+      document.getElementById('fileName').classList.remove('show');
+      uploadZone.classList.remove('has-file');
+      uploadZone.querySelector('.upload-icon').textContent = '📄';
+      document.getElementById('fileInput').value = '';
+    }
+
+    /* ────────────────────────────────────────────────
+       API KEY
+    ──────────────────────────────────────────────── */
+    let apiKey = '';
+
+    function saveApiKey() {
+      const val = document.getElementById('apiKeyInput').value.trim();
+      setApiKey(val, 'apiStatus');
+    }
+    function saveApiKeyFromModal() {
+      const val = document.getElementById('modalApiKey').value.trim();
+      setApiKey(val, 'modalStatus');
+      if (val.startsWith('AIza')) setTimeout(closeModal, 800);
+    }
+    function setApiKey(val, statusId) {
+      const status = document.getElementById(statusId);
+      if (!val) { status.textContent = 'Please enter a key.'; status.className = 'api-status err'; return; }
+      if (!val.startsWith('AIza')) { status.textContent = 'That doesn\'t look like a valid Gemini key.'; status.className = 'api-status err'; return; }
+      apiKey = val;
+      status.textContent = '✓ Key saved. Ready to explain!'; status.className = 'api-status ok';
+      document.getElementById('apiKeyInput').value = val;
+    }
+
+    /* ────────────────────────────────────────────────
+       MODAL
+    ──────────────────────────────────────────────── */
+    function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+    function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+    /* ────────────────────────────────────────────────
+       QUICK PROMPTS
+    ──────────────────────────────────────────────── */
+    function setQuickPrompt(btn, text) {
+      document.querySelectorAll('.quick-prompt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const ta = document.getElementById('promptInput');
+      ta.value = text; autoResize(ta);
+    }
+
+    /* ────────────────────────────────────────────────
+       AUTO-RESIZE TEXTAREA
+    ──────────────────────────────────────────────── */
+    function autoResize(ta) { ta.style.height = 'auto'; ta.style.height = (ta.scrollHeight) + 'px'; }
+
+    function handlePromptKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendPrompt(); }
+    }
+
+    /* ────────────────────────────────────────────────
+       SEND PROMPT → GEMINI
+    ──────────────────────────────────────────────── */
+    const history = [];
+
+    async function sendPrompt() {
+      const prompt = document.getElementById('promptInput').value.trim();
+      if (!prompt) { flash(document.getElementById('promptInput')); return; }
+      if (!apiKey) { openModal(); return; }
+
+      // Build user message
+      const userQ = prompt;
+      const card = document.getElementById('responseCard');
+      const body = document.getElementById('responseBody');
+      const load = document.getElementById('loadingState');
+      const err = document.getElementById('errorState');
+      const sub = document.getElementById('responseSubtitle');
+
+      card.classList.add('show');
+      load.classList.add('show');
+      body.innerHTML = ''; body.style.display = 'none';
+      err.classList.remove('show');
+      document.getElementById('sendBtn').disabled = true;
+      sub.textContent = 'Thinking in plain English...';
+
+      // Scroll to response
+      setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+
+      // Build Gemini request parts
+      const parts = [];
+
+      // System instruction embedded in user turn for compatibility
+      const systemPrompt = `You are "Lay Man Terms" — a warm, patient, friendly AI tutor. Your job is to explain educational material in the simplest, most relatable way possible, like a knowledgeable friend sitting next to the student. 
+
+Rules:
+- Use plain, everyday language. Avoid jargon unless you explain it clearly right after.
+- Use analogies, real-world comparisons, and examples to make concepts stick.
+- Be encouraging and positive — never condescending.
+- Structure your response well: use headers, bullet points, and bold key terms where helpful.
+- When summarising, pull out the MOST important ideas first.
+- End with a "Quick Recap" or "Remember This" section with the 2-3 golden takeaways.
+- Keep a conversational, tutor-like tone throughout.`;
+
+      if (uploadedFileData) {
+        if (uploadedFileType.startsWith('image/')) {
+          const b64 = uploadedFileData.split(',')[1];
+          const mime = uploadedFileType;
+          parts.push({ inlineData: { mimeType: mime, data: b64 } });
+          parts.push({ text: `${systemPrompt}\n\nThe student uploaded an image of their notes/document. ${userQ}` });
+        } else {
+          const fileText = typeof uploadedFileData === 'string' ? uploadedFileData : '';
+          parts.push({ text: `${systemPrompt}\n\nThe student has uploaded a document called "${uploadedFileName}". Here are its contents:\n\n---\n${fileText.slice(0, 30000)}\n---\n\nStudent's question: ${userQ}` });
+        }
+      } else {
+        parts.push({ text: `${systemPrompt}\n\nStudent's question (no document uploaded): ${userQ}` });
+      }
+
+      // Build conversation history
+      const contents = [];
+      history.forEach(h => {
+        contents.push({ role: 'user', parts: [{ text: h.q }] });
+        contents.push({ role: 'model', parts: [{ text: h.a }] });
+      });
+      contents.push({ role: 'user', parts });
+
+      try {
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents,
+              generationConfig: {
+                temperature: 0.75,
+                topK: 40,
+                topP: 0.95,
+                maxOutputTokens: 2048
+              }
+            })
+          }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error?.message || `API error ${res.status}`);
+        }
+
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+
+        // Save to history
+        history.push({ q: userQ, a: text, file: uploadedFileName, time: new Date() });
+
+        load.classList.remove('show');
+        body.style.display = 'block';
+        sub.textContent = uploadedFileName ? `Explaining: ${uploadedFileName}` : 'Your AI tutor';
+
+        // Render markdown-like text
+        body.innerHTML = renderMarkdown(text);
+
+        // Typewriter effect trigger (already rendered but fade in)
+        body.style.opacity = '0';
+        body.style.transform = 'translateY(10px)';
+        body.style.transition = 'opacity 0.5s, transform 0.5s';
+        requestAnimationFrame(() => {
+          body.style.opacity = '1';
+          body.style.transform = 'translateY(0)';
+        });
+
+        addToHistory(userQ, text, uploadedFileName);
+        document.getElementById('promptInput').value = '';
+        autoResize(document.getElementById('promptInput'));
+        document.querySelectorAll('.quick-prompt').forEach(b => b.classList.remove('active'));
+
+      } catch (e) {
+        load.classList.remove('show');
+        err.classList.add('show');
+        err.textContent = '⚠️ ' + (e.message || 'Something went wrong. Check your API key and try again.');
+      }
+
+      document.getElementById('sendBtn').disabled = false;
+    }
+
+    /* ────────────────────────────────────────────────
+       MARKDOWN RENDERER (lightweight)
+    ──────────────────────────────────────────────── */
+    function renderMarkdown(text) {
+      let html = text
+        // Code blocks
+        .replace(/```[\s\S]*?```/g, m => `<pre style="background:var(--surface2);border-radius:10px;padding:16px 20px;overflow-x:auto;margin:16px 0;font-size:0.88em;line-height:1.6;border:1px solid var(--border)"><code>${m.slice(3, -3).replace(/^[a-z]+\n/, '').replace(/</g, '&lt;')}</code></pre>`)
+        // Inline code
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        // Headers
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h2>$1</h2>')
+        // Bold
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        // Italic
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        // Blockquote
+        .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+        // Bullet lists
+        .replace(/^[-•] (.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>')
+        // Numbered lists
+        .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+        // HR
+        .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">')
+        // Paragraphs
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+
+      return '<p>' + html + '</p>';
+    }
+
+    /* ────────────────────────────────────────────────
+       HISTORY
+    ──────────────────────────────────────────────── */
+    function addToHistory(q, a, file) {
+      const section = document.getElementById('historySection');
+      const list = document.getElementById('historyList');
+      section.style.display = 'block';
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const preview = a.replace(/<[^>]+>/g, '').slice(0, 200) + '...';
+      const id = 'hist-' + Date.now();
+      const item = document.createElement('div');
+      item.className = 'history-item reveal';
+      item.innerHTML = `
+    <div class="history-item-header">
+      <div class="history-q">"${q}"${file ? ` · <em>${file}</em>` : ''}</div>
+      <div class="history-time">${now}</div>
+    </div>
+    <div class="history-preview" id="${id}-preview">${preview}</div>
+    <div style="display:none;font-size:0.9rem;line-height:1.7;" id="${id}-full">${renderMarkdown(a)}</div>
+    <button class="history-expand" onclick="toggleHistory('${id}', this)">Show full response</button>
+  `;
+      list.prepend(item);
+      observer.observe(item);
+    }
+
+    function toggleHistory(id, btn) {
+      const preview = document.getElementById(id + '-preview');
+      const full = document.getElementById(id + '-full');
+      const isOpen = full.style.display !== 'none';
+      full.style.display = isOpen ? 'none' : 'block';
+      preview.style.display = isOpen ? 'block' : 'none';
+      btn.textContent = isOpen ? 'Show full response' : 'Hide response';
+    }
+
+    /* ────────────────────────────────────────────────
+       COPY
+    ──────────────────────────────────────────────── */
+    function copyResponse() {
+      const text = document.getElementById('responseBody').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!'; btn.style.color = 'var(--accent2)';
+        setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = ''; }, 2000);
+      });
+    }
+
+    /* ────────────────────────────────────────────────
+       FLASH (invalid input feedback)
+    ──────────────────────────────────────────────── */
+    function flash(el) {
+      el.style.transition = 'border-color 0.1s';
+      el.style.borderColor = '#f06a4a';
+      setTimeout(() => el.style.borderColor = '', 600);
+    }
+
+    /* ────────────────────────────────────────────────
+       INIT
+    ──────────────────────────────────────────────── */
+    window.addEventListener('load', () => {
+      // Re-observe any dynamically added reveals
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+  </script>
+</body>
+
+</html>
